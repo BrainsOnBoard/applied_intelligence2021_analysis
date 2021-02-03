@@ -19,7 +19,7 @@ static const std::vector<std::string> TrainRoutes = { "0511/unwrapped_dataset1",
                                                       "0511/unwrapped_dataset2" };
 const std::vector<std::string> TestRoutes = { "0511/unwrapped_dataset3" };
 
-void
+inline void
 loadDatabaseImages(std::vector<cv::Mat> &images,
                    const std::string &dbName)
 {
@@ -30,9 +30,20 @@ loadDatabaseImages(std::vector<cv::Mat> &images,
     std::cout << "Loaded " << images.size() << " images from " << dbName << "\n";
 }
 
+inline auto
+loadDatabaseImages(const std::vector<std::string> &dbNames)
+{
+    std::vector<cv::Mat> images;
+    for (const auto &dbName : dbNames) {
+        loadDatabaseImages(images, dbName);
+    }
+
+    return images;
+}
+
 template<class Algo>
 void
-doTest(Algo &algo, std::vector<cv::Mat> &testImages, cv::FileStorage &fs)
+doTest(Algo &algo, const std::vector<cv::Mat> &testImages, cv::FileStorage &fs)
 {
     static std::vector<double> headings;
     headings.clear();
@@ -49,54 +60,76 @@ doTest(Algo &algo, std::vector<cv::Mat> &testImages, cv::FileStorage &fs)
 
     fs << "time_per_image_ms" << testTime.value() / testImages.size()
        << "headings_deg"
-       << "[" << headings << "]";
+       << headings;
+}
+
+struct ExperimentData {
+    template<class... Ts>
+    ExperimentData(Ts&&... params)
+      : fs{ BoBRobotics::Path::getProgramPath().str() + ".json",
+            cv::FileStorage::WRITE }
+      , trainImages{ loadDatabaseImages(TrainRoutes) }
+      , testImages{ loadDatabaseImages(TestRoutes) }
+    {
+        fs << "data"
+           << "{"
+           << "bob_robotics_git_commit" << BOB_ROBOTICS_GIT_COMMIT
+           << "bob_project_git_commit" << BOB_PROJECT_GIT_COMMIT;
+        saveExtraParams(std::forward<Ts>(params)...);
+        fs << "experiments"
+           << "[";
+    }
+    
+    template<class T>
+    void saveExtraParams(const std::string &name, const T &value)
+    {
+        fs << name << value;
+    }
+    
+    void saveExtraParams()
+    {}
+
+    ~ExperimentData()
+    {
+        fs << "]" << "}";
+    }
+
+    cv::FileStorage fs;
+    const std::vector<cv::Mat> trainImages, testImages;
+};
+
+template<class Algo>
+void trainAndTest(Algo &algo, ExperimentData &expt)
+{
+    BoBRobotics::Stopwatch timer;
+    std::cout << "Training...";
+    timer.start();
+    algo.trainRoute(expt.trainImages);
+    const units::time::millisecond_t trainTime = timer.elapsed();
+    std::cout << "Completed in " << trainTime << "\n";
+
+    expt.fs << "{"
+            << "image_size" << ImageSize
+            << "training"
+            << "{"
+            << "routes"
+            << TrainRoutes
+            << "time_per_image_ms" << trainTime.value() / expt.trainImages.size()
+            << "}";
+
+    expt.fs << "testing"
+            << "{"
+            << "routes"
+            << TestRoutes;
+    doTest(algo, expt.testImages, expt.fs);
+    expt.fs << "}";
+
+    expt.fs << "}";
 }
 
 template<class Algo>
-void
-trainAndTest(Algo &algo)
+void trainAndTest(Algo &algo)
 {
-    using namespace BoBRobotics;
-    using namespace units::time;
-
-    std::vector<cv::Mat> trainImages;
-    for (const auto &route : TrainRoutes) {
-        loadDatabaseImages(trainImages, route);
-    }
-
-    std::vector<cv::Mat> testImages;
-    for (const auto &route : TestRoutes) {
-        loadDatabaseImages(testImages, route);
-    }
-
-    std::string ofName = Path::getProgramPath().str() + ".yaml";
-    cv::FileStorage fs{ ofName, cv::FileStorage::WRITE };
-    fs << "data"
-       << "{"
-       << "bob_robotics_git_commit" << BOB_ROBOTICS_GIT_COMMIT
-       << "bob_project_git_commit" << BOB_PROJECT_GIT_COMMIT
-       << "image_size" << ImageSize;
-
-    Stopwatch timer;
-    std::cout << "Training...";
-    timer.start();
-    algo.trainRoute(trainImages);
-    const millisecond_t trainTime = timer.elapsed();
-    std::cout << "Completed in " << trainTime << "\n";
-
-    fs << "training"
-       << "{"
-       << "routes"
-       << "[" << TrainRoutes << "]"
-       << "time_per_image_ms" << trainTime.value() / trainImages.size()
-       << "}";
-
-    fs << "testing"
-       << "{"
-       << "routes"
-       << "[" << TestRoutes << "]";
-    doTest(algo, testImages, fs);
-    fs << "}";
-
-    fs << "}";
+    ExperimentData expt;
+    trainAndTest(algo, expt);
 }
