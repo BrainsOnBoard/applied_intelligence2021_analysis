@@ -6,7 +6,7 @@ sys.path.append(NAVBENCH_PATH)
 import cv2
 import matplotlib.pyplot as plt
 import navbench as nb
-from navbench import improc as ip
+from navbench import imgproc as ip
 import os
 
 plt.rcParams.update({'font.size': 18})
