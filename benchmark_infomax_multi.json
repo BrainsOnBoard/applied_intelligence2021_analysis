@@ -11,13 +11,13 @@
                         "0511/unwrapped_dataset1",
                         "0511/unwrapped_dataset2"
                     ],
-                    "time_per_image_ms": 2.9631811053984575e-02
+                    "time_per_image_ms": 2.6692057840616967e-02
                 },
                 "testing": {
                     "routes": [
                         "0511/unwrapped_dataset3"
                     ],
-                    "time_per_image_ms": 1.1229163407960199e+00,
+                    "time_per_image_ms": 1.2602537810945275e-01,
                     "headings_deg": [ 48.0, 48.0, 64.0, 64.0, 56.0, 56.0,
                         5.1999999999999993e+01, 5.1999999999999993e+01,
                         92.0, 56.0, 64.0, -68.0, 40.0, 40.0,
@@ -170,13 +170,13 @@
                         "0511/unwrapped_dataset1",
                         "0511/unwrapped_dataset2"
                     ],
-                    "time_per_image_ms": 3.3515871465295631e-02
+                    "time_per_image_ms": 3.5173285347043705e-02
                 },
                 "testing": {
                     "routes": [
                         "0511/unwrapped_dataset3"
                     ],
-                    "time_per_image_ms": 3.3570345024875620e-01,
+                    "time_per_image_ms": 1.8438448009950251e-01,
                     "headings_deg": [ -1.2000000000000018e+01,
                         -1.2000000000000018e+01, -8.0000000000000107e+00,
                         -1.2000000000000018e+01, -1.2000000000000018e+01,
@@ -320,13 +320,13 @@
                         "0511/unwrapped_dataset1",
                         "0511/unwrapped_dataset2"
                     ],
-                    "time_per_image_ms": 1.8349632005141386e-01
+                    "time_per_image_ms": 8.5470925449871463e-02
                 },
                 "testing": {
                     "routes": [
                         "0511/unwrapped_dataset3"
                     ],
-                    "time_per_image_ms": 4.9342629850746267e-01,
+                    "time_per_image_ms": 1.4303644029850748e-01,
                     "headings_deg": [ 132.0, 132.0, 132.0, 132.0, 4.0,
                         132.0, 5.1999999999999993e+01,
                         5.1999999999999993e+01, 132.0,
@@ -480,13 +480,13 @@
                         "0511/unwrapped_dataset1",
                         "0511/unwrapped_dataset2"
                     ],
-                    "time_per_image_ms": 3.7792176478149098e-01
+                    "time_per_image_ms": 1.4902388817480719e-01
                 },
                 "testing": {
                     "routes": [
                         "0511/unwrapped_dataset3"
                     ],
-                    "time_per_image_ms": 2.9921144029850749e-01,
+                    "time_per_image_ms": 1.1010352736318407e-01,
                     "headings_deg": [ 28.0, 28.0, -136.0, 12.0, 28.0,
                         -1.2799999999999999e+02, -1.2799999999999999e+02,
                         -1.2799999999999999e+02, -1.2799999999999999e+02,
@@ -623,13 +623,13 @@
                         "0511/unwrapped_dataset1",
                         "0511/unwrapped_dataset2"
                     ],
-                    "time_per_image_ms": 5.3269238174807199e-01
+                    "time_per_image_ms": 3.1843671722365036e-01
                 },
                 "testing": {
                     "routes": [
                         "0511/unwrapped_dataset3"
                     ],
-                    "time_per_image_ms": 4.9003664676616915e-01,
+                    "time_per_image_ms": 2.2998299999999999e-01,
                     "headings_deg": [ 24.0, 24.0, 12.0, 24.0, 24.0,
                         -1.2000000000000018e+01, -1.2000000000000018e+01,
                         -1.2000000000000018e+01, -8.0000000000000107e+00,
