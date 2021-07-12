@@ -31,7 +31,7 @@ runTest(Algo &algo, std::vector<cv::Mat> &trainImages,
 int
 bobMain(int, char **)
 {
-    std::string ofName = Path::getProgramPath().str() + ".yaml";
+    std::string ofName = Path::getProgramPath().str() + ".json";
     cv::FileStorage fs{ ofName, cv::FileStorage::WRITE };
     fs << "data"
        << "{"
@@ -43,7 +43,8 @@ bobMain(int, char **)
     for (const auto &route : TrainRoutes) {
         loadDatabaseImages(trainImages, route);
     }
-    fs << "training"
+    fs << "experiments" << "["
+       << "training"
        << "{"
        << "routes" << TrainRoutes
        << "}";
@@ -72,6 +73,7 @@ bobMain(int, char **)
     }
 
     fs << "}"
+       << "]"
        << "}";
     return EXIT_SUCCESS;
 }
